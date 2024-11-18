@@ -1,0 +1,99 @@
+<html>
+
+
+
+<body onload="onload()">
+    <table border="5" id="table">
+        <tr>
+
+            <td> Full Name </td>
+            <td> Faculty </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+    </table>
+
+
+    <script>
+
+        async function getStudents() {
+            const resp = await fetch('http://localhost:8000/students')
+            if (resp.ok === true) {
+                const students = await resp.json()
+                const tableEl = document.getElementById('table')
+
+                for (let i = 0; i < students.length; i++) {
+                    const trEl = document.createElement('tr')
+                    const td1El = document.createElement('td')
+                    const td2El = document.createElement('td')
+                    const td3El = document.createElement('td')
+                    const td4El = document.createElement('td')
+                    const td5El = document.createElement('td')
+                    const buttonDeleteEl = document.createElement('input')
+                    const a1El = document.createElement('a')
+                    const a3El = document.createElement('a')
+                    const a4El = document.createElement('a')
+
+
+                    trEl.appendChild(td1El)
+                    trEl.appendChild(td2El)
+                    trEl.appendChild(td3El)
+                    trEl.appendChild(td4El)
+                    trEl.appendChild(td5El)
+                    td5El.appendChild(buttonDeleteEl)
+                    tableEl.appendChild(trEl)
+                    a1El.appendChild(td1El)
+                    a3El.appendChild(td3El)
+                    a4El.appendChild(td4El)
+
+
+
+
+                    a1El.href = "page2-dataStudent.html"
+                    a1El.innerText = students[i].fullName
+                    a3El.href = "page3-studentsGrades.html"
+                    a3El.innerText = students[i].faculty
+                    a4El.href = "page4-updateStudent.html"
+                    a4El.innerText = "Edit"
+                    // td3El.innerText = location.href = "page3-studentsGrades.html"
+                    // td4El.innerText = location.href = "page4-updateStudent.html"
+                    // td4El.innerText = location.href = "page4-updateStudent.html"
+                    buttonDeleteEl.type = "button"
+                    buttonDeleteEl.onclick = async function () {
+                        let id = students[i]._id
+                        const resp = await fetch(`http://localhost:8000/students/${id}`, {
+                            method: 'delete'
+                        })
+                        if (resp.ok === true) {
+                            const data = await resp.json()
+                            console.log(data);
+                            location.reload()
+                        } else {
+                            console.log('error');
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+
+
+
+
+        function onload() {
+
+            getStudents()
+        }
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
